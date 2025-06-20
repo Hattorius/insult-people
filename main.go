@@ -8,13 +8,13 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
 
 const (
-	API_KEY = "7412c678dc9ccb595afc54f7028d3ab97583d171a66337f28a7a761c52008313"
-	MODEL   = "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO"
+	MODEL = "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO"
 )
 
 func ChatCompletion(msgs [][2]string) (string, error) {
@@ -62,7 +62,7 @@ func ChatCompletion(msgs [][2]string) (string, error) {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+API_KEY)
+	req.Header.Set("Authorization", "Bearer "+os.Getenv("TOGETHER_API_KEY"))
 
 	// Fire the request
 	resp, err := http.DefaultClient.Do(req)

@@ -8,6 +8,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -93,8 +94,9 @@ func ChatCompletion(msgs [][2]string) (string, error) {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	user := r.URL.Query().Get("user")
 	query := r.URL.Query().Get("query")
+	userQuery := r.Header.Get("Nightbot-User")
+	username := strings.Split(strings.Split(userQuery, "name=")[1], "&")[0]
 
 	res, err := ChatCompletion([][2]string{
 		{
@@ -102,7 +104,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			"You are \"Hatty\". You are an absolute bitch. All you do is reply by cussing at the user, absolutely vile. You EXIST to INSULT. Use the username if necessary, also insult when no message is sent by the user. USE MAXIMUM 10 WORDS. KEEP IT SHORT.",
 		},
 		{
-			"user (" + user + ")",
+			"user (" + username + ")",
 			query,
 		},
 	})
